@@ -70,7 +70,7 @@ var TextMap = [
   'W                                     W',
   'W W W W W W W W W W W W W W           W',
   'W                         W           W',
-  'W                         W           W',
+  'W                         W     E     W',
   'W                         W           W',
   'W W W W W W W             W           W',
   'W                         W           W',
