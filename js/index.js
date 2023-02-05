@@ -108,7 +108,7 @@ async function connectToBluetooth() {
   }
 
   async function myAsyncFunction(param) {
-    await loadScript('./code.js');
+    await loadScript('./js/code.js');
     updateVar(param)
   }
 
