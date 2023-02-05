@@ -8,20 +8,32 @@
     <title>Document</title>
 </head>
 <body>
-    <div class = 'playSend'>
+<div class = 'playSend'>
     <button id="connectButton" style="display:none" >Play</button>
-    <!-- <button id="sendButton" class="bt">Send Information</button> -->
+    <select id="modeSelect">
+        <option value="joystick" selected>Joystick Mode</option>
+        <option value="gyroscope">Gyroscope Mode</option>
+    </select>
+</div>
+<canvas id="main"></canvas>
+<div class="left"></div>
+
+<div class="gameover">
+    <h1 class="result">Wasted</h1>
+    <div class="button">
+        <a href="#">Try again</a>
     </div>
-    <canvas id="main"></canvas>
-
-    <div class="left"></div>
-
-    <div class="gameover">
-        <h1 class="result">Wasted</h1>
-        <div class="button">
-          <a href="#">Try again</a>
-        </div>
-      </div>
+</div>
 </body>
-<script src="js/index.js"></script>
+<script src="./js/index.js"></script>
+<script>
+    var selectedMode;
+
+    const selectElement = document.getElementById("modeSelect");
+
+    selectElement.addEventListener("change", function() {
+        selectedMode = this.value;
+        console.log(selectedMode)
+    });
+</script>
 </html>

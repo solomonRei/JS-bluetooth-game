@@ -2,8 +2,19 @@ document.getElementsByClassName('playSend')[0].style.display = "none";
 const res1 = document.getElementsByClassName('result')[0];
 const playAgain =document.getElementsByClassName('button')[0]
 const left = document.getElementsByClassName('left')[0];
+let playAgainArduino = false;
+
+const selected = selectedMode
+
+function clickByJoystick(elem, status) {
+  if(status) {
+    elem.click()
+    playAgainArduino = false;
+  }
+}
 
 playAgain.addEventListener('click', e => {
+
   resetGame()
 
 })
@@ -54,14 +65,14 @@ var TextMap = [
   'W       W                             W',
   'W       W                 W W W W W W W',
   'W     W W                             W',
-  'W                 E                   W',
+  'W                                     W',
   'W                                     W',
   'W                                     W',
   'W W W W W W W W W W W W W W           W',
-  'W                         W      E    W',
   'W                         W           W',
   'W                         W           W',
-  'W W W W W W W             W           W',
+  'W                         W           W',
+  'W W W W W W W     E       W           W',
   'W                         W           W',
   'W               W W W W W W           W',
   'W   P                     W           W',
@@ -396,7 +407,9 @@ var Player = function (x, y) {
           setTimeout(function () {
             res1.innerHTML = 'WASTED'
             gameover.style.display = 'block';
-          }, 1000);
+            playAgainArduino = true;
+
+          }, 300);
         }
       }
 
@@ -492,7 +505,9 @@ function enemCount() {
   left.innerHTML = `${enemC} enemies left`
 
   if(enemC == 0){
+    isButtonClicked
     res1.innerHTML = 'YOU WON!'
+    playAgainArduino = true
     document.getElementsByClassName('gameover')[0].style.display = 'block'
   }
 }
@@ -1017,7 +1032,6 @@ document.addEventListener('keyup', function (event) {
 document.addEventListener('mousemove', function (event) {
   mouse.x = event.clientX;
   mouse.y = event.clientY;
-  console.log(mouse.x, ' ', mouse.y)
 });
 
 document.addEventListener('mousedown', function (event) {
@@ -1030,41 +1044,86 @@ document.addEventListener('mouseup', function (event) {
 
 
 function updateVar(values){
+
   values.forEach((e) => parseFloat(e))
   x = values[1] / 1024 * window.innerWidth
   y = values[2] / 1024 * window.innerHeight
 
   mouse.x = window.innerWidth - x
   mouse.y =window.innerHeight -  y
-  if(values[1] < 520){
-    keyboard.right = true;
-  }
-  else
-    keyboard.right = false
 
-  if(values[1] > 530){
-    keyboard.left = true;
-  }
-  else
-    keyboard.left = false
+  if(selected == 'gyroscope'){
+    // if(values[3] > -1 && values[3] < 2 && values[4] > 68 && values[4] < 73 ){
+    //     keyboard.down = false
+    //     keyboard.up = false
+    //     keyboard.left = false
+    //     keyboard.right = false
+    // }
 
-  if(values[2] > 530){
-    keyboard.up = true
-  }
-  else
-    keyboard.up = false
+    if( values[4] > 100){
+      keyboard.left = false
+      keyboard.right = false
+      keyboard.down = false
+      keyboard.up = true
+    }
 
-  if(values[2] < 520){
-    keyboard.down = true
+    if( values[4] < 50){
+      keyboard.up = false
+      keyboard.left = false
+      keyboard.right = false
+      keyboard.down = true
+    }
+
+    if( values[3] < -20){
+      keyboard.left = false;
+      keyboard.up = false;
+      keyboard.down = false;
+      keyboard.right = true
+    }
+
+    if(values[3] > 40){
+      keyboard.right = false
+      keyboard.up = false;
+      keyboard.down = false;
+      keyboard.left = true
+    }
+
   }
-  else
-    keyboard.down = false
+
+  else {
+    if(values[1] < 490){
+      keyboard.right = true;
+    }
+    else
+      keyboard.right = false
+
+    if(values[1] > 550){
+      keyboard.left = true;
+    }
+    else
+      keyboard.left = false
+
+    if(values[2] > 550){
+      keyboard.up = true
+    }
+    else
+      keyboard.up = false
+
+    if(values[2] < 490){
+      keyboard.down = true
+    }
+    else
+      keyboard.down = false
+  }
 
   if(values[0] == 0){
     mouse.pressed = true
+    clickByJoystick(playAgain, playAgainArduino);
   }
   else
     mouse.pressed = false
+
+  console.log(document.getElementsByClassName('gameover')[0].style.display)
 
   // if((values[3] < 10 && values[3] > -10 && values[4] < 10 && values[4] > -10) || (values[3] < -10 && values[4] < -10)){
   //     mouse.x = window.innerWidth / 2
